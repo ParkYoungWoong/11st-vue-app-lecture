@@ -35,6 +35,13 @@
           </ul>
         </div>
       </div>
+      <div class="exhibitions">
+        <a :href="navigations.exhibitions.href">
+          <img
+            :src="navigations.exhibitions.src"
+            :alt="navigations.exhibitions.name" />
+        </a>
+      </div>
     </nav>
 
     <!--BACKGROUND-->
@@ -120,6 +127,10 @@ export default {
       }
     }
     .container {
+      height: calc(100% - 164px);
+      overflow-y: auto;
+      padding: 10px 0;
+      box-sizing: border-box;
       // Common!
       .group {
         &__title {
@@ -148,21 +159,21 @@ export default {
                 background-image: url("https://trusting-williams-8cacfb.netlify.app/images/categories_2x.png");
                 background-size: 48px; // Origin 96px
               }
-              @for $i from 0 to 12 {
+              @for $i from 1 through 13 {
                 &:nth-child(#{$i}) {
                   .category-icon {
-                    background-position: 0 -#{$i * 24}px;
+                    background-position: 0 -#{($i - 1) * 24}px;
                   }
                 }
               }
               // TODO: 클래스 선택자로 수정해야 함!
-              &:hover {
+              &.hover {
                 background-color: #ff5534;
                 color: #fff;
-                @for $i from 0 through 12 {
+                @for $i from 1 through 13 {
                   &:nth-child(#{$i}) {
                     .category-icon {
-                      background-position: -24px -#{$i * 24}px;
+                      background-position: -24px -#{($i - 1) * 24}px;
                     }
                   }
                 }
@@ -183,9 +194,37 @@ export default {
                 left: 300px;
                 background-color: #fff;
                 font-size: 15px;
+                overflow-y: auto;
+                li {
+                  height: 40px;
+                  a {
+                    padding: 0 20px;
+                  }
+                  &:hover {
+                    background-color: #fafafa;
+                    color: #ff5534;
+                    a {
+                      color: #ff5534;
+                    }
+                  }
+                }
               }
             }
           }
+        }
+      }
+    }
+    .exhibitions {
+      width: 300px;
+      height: 94px;
+      a {
+        display: block;
+        width: inherit;
+        height: inherit;
+        cursor: pointer;
+        img {
+          width: inherit;
+          height: inherit;
         }
       }
     }
