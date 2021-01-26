@@ -19,19 +19,64 @@
             class="search__icon"
             @click="search"></div>
         </div>
+        <div class="ranking">
+          <!-- Slider main container -->
+          <div
+            ref="swiper"
+            class="swiper-container">
+            <!-- Additional required wrapper -->
+            <div class="swiper-wrapper">
+              <!-- Slides -->
+              <div
+                v-for="(rank, index) in rankings.rankings"
+                :key="rank.name"
+                class="swiper-slide">
+                <a :href="rank.href">
+                  <span class="index">{{ index + 1 }}</span>
+                  <span class="name">{{ rank.name }}</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </header>
   </div>
 </template>
 
 <script>
+// Swiper.js를 모듈로 활용하는 경우 bundle로 가져와야 합니다.
+import Swiper from 'swiper/bundle'
+// Style를 연결해야 정상적으로 동작합니다.
+import 'swiper/swiper-bundle.css'
+
 export default {
   data () {
     return {
-      searchText: ''
+      searchText: '',
+      rankings: {}
     }
   },
+  mounted () {
+    this.init()
+  },
   methods: {
+    async init () {
+      this.rankings = await this.$fetch({
+        requestName: 'rankings'
+      })
+
+      this.$nextTick(() => {
+        new Swiper(this.$refs.swiper, {
+          direction: 'vertical',
+          speed: 1000,
+          autoplay: {
+            delay: 1000
+          },
+          loop: true
+        })
+      })
+    },
     onNav () {
       // Open LNB!
       this.$store.dispatch('navigation/onNav')
@@ -116,6 +161,33 @@ export default {
           background-image: url("https://trusting-williams-8cacfb.netlify.app/images/globals_2x.png");
           background-position: -162px -45px;
           background-size: 363px;
+        }
+      }
+      .ranking {
+        width: 210px;
+        margin: 0 30px;
+        .swiper-container {
+          width: 182px;
+          height: 28px;
+          .swiper-slide {
+            a {
+              display: block;
+              height: 28px;
+              line-height: 28px;
+              text-decoration: none;
+              font-size: 15px;
+              color: #333;
+              font-weight: 700;
+              span.index {
+                margin-right: 10px;
+                color: #f43142;
+                font-style: italic;
+              }
+              &:hover span.name {
+                color: #f43142;
+              }
+            }
+          }
         }
       }
     }
